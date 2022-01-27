@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2022_01_27_153033) do
 
   create_table "routes", force: :cascade do |t|
+    t.string "external_id"
     t.string "route_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -30,12 +31,14 @@ ActiveRecord::Schema.define(version: 2022_01_27_153033) do
   end
 
   create_table "stops", force: :cascade do |t|
+    t.string "external_id"
     t.string "stop_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "trips", force: :cascade do |t|
+    t.string "external_id"
     t.string "service_id"
     t.integer "route_id", null: false
     t.datetime "created_at", precision: 6, null: false

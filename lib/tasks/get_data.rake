@@ -20,4 +20,19 @@ namespace :get_data do
     end
     FileUtils.rm('data.zip')
   end
+
+  task store_data: :environment do
+    store_stops
+
+  end
+
+  def store_stops
+    File.open("data/stops.txt", "r").each_line do |line|
+      data = line.split(',')
+      id = data[0]
+      name = data[1]
+      s = Stop.new(:external_id => id, :stop_name => name)
+      s.save
+    end
+  end
 end
