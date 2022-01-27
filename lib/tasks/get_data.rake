@@ -22,17 +22,34 @@ namespace :get_data do
   end
 
   task store_data: :environment do
-    store_stops
+    # store_stops
+    store_routes
 
   end
 
   def store_stops
-    File.open("data/stops.txt", "r").each_line do |line|
+    file = File.open("data/stops.txt", "r")
+    file.each_line do |line|
+      next if file.lineno == 1
       data = line.split(',')
       id = data[0]
       name = data[1]
       s = Stop.new(:external_id => id, :stop_name => name)
       s.save
+    end
+  end
+
+  def store_routes
+    file = File.open("data/routes.txt", "r")
+    file.each_line do |line|
+      next if file.lineno == 1
+      data = line.split(',')
+      if data[4] == "0"
+        id = data[0]
+        name = data[2]
+        r = Route.new(:external_id => id, :route_name => name)
+        r.save
+      end
     end
   end
 end
