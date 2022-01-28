@@ -2,7 +2,7 @@ require 'zip/filesystem'
 
 namespace :get_data do
   desc "download zip file, open it and save data into database"
-  task run_all: [:environment, 'get_data:download_file', 'get_data:unzip_data']
+  task run_all: [:environment, 'get_data:download_file', 'get_data:unzip_data', 'get_data:store_data']
 
   task download_file: :environment do
     open('data.zip', 'wb') do |file|
@@ -22,9 +22,10 @@ namespace :get_data do
   end
 
   task store_data: :environment do
-    # store_stops
-    # store_routes
+    store_stops
+    store_routes
     store_trips
+    store_stop_times
   end
 
   def store_stops
@@ -32,8 +33,7 @@ namespace :get_data do
     file.each_line do |line|
       next if file.lineno == 1
       data = line.split(',')
-      id = data[0]
-      name = data[1]
+      id, name = data
       Stop.create(:external_id => id, :stop_name => name)
     end
   end
@@ -61,6 +61,21 @@ namespace :get_data do
       route = Route.find_by_external_id(route_id)
       if route != nil
         Trip.create(external_id: trip_id, service_id: service_id, route_id: route.id)
+      end
+    end
+  end
+
+  def store_stop_times
+    file = File.open("data/stop_times.txt", "r")
+    file.each_line do |line|
+      next if file.lineno == 1
+
+      data = line.split(',')
+      trip_id, arrival_time, departure_time, stop_id = data
+      trip = Trip.find_by_external_id(trip_id)
+      stop = Stop.find_by_external_id(stop_id)
+      if trip != nil and stop != nil
+        StopTime.create(arrival_time: arrival_time, departure_time: departure_time, trip_id: trip.id, stop_id: stop.id)
       end
     end
   end
