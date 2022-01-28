@@ -23,8 +23,8 @@ namespace :get_data do
 
   task store_data: :environment do
     # store_stops
-    store_routes
-
+    # store_routes
+    store_trips
   end
 
   def store_stops
@@ -34,8 +34,7 @@ namespace :get_data do
       data = line.split(',')
       id = data[0]
       name = data[1]
-      s = Stop.new(:external_id => id, :stop_name => name)
-      s.save
+      Stop.create(:external_id => id, :stop_name => name)
     end
   end
 
@@ -47,8 +46,21 @@ namespace :get_data do
       if data[4] == "0"
         id = data[0]
         name = data[2]
-        r = Route.new(:external_id => id, :route_name => name)
-        r.save
+        Route.create(:external_id => id, :route_name => name)
+      end
+    end
+  end
+
+  def store_trips
+    file = File.open("data/trips.txt", "r")
+    file.each_line do |line|
+      next if file.lineno == 1
+
+      data = line.split(',')
+      route_id, service_id, trip_id = data
+      route = Route.find_by_external_id(route_id)
+      if route != nil
+        Trip.create(external_id: trip_id, service_id: service_id, route_id: route.id)
       end
     end
   end
