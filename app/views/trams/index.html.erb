@@ -1,7 +1,7 @@
 <h1>Trams</h1>
 <%= form_with url: url_for(:controller => :trams, :action => :tram_select) do %>
 <label for="route_id">Select tram route:</label>
-  <%= select_tag "id", options_for_select(@trams.collect {|t| [t.route_name, t.id]}) %>
+  <%= select_tag "route_id", options_for_select(@trams.collect {|t| [t.route_name, t.id]}) %>
   <%= submit_tag("Select") %>
 <% end %>
 
