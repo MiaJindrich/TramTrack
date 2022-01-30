@@ -1,0 +1,20 @@
+<h1>Trams</h1>
+<%= form_with url: url_for(:controller => :trams, :action => :tram_select) do %>
+  <label for="route_id">Select tram route:</label>
+  <%= select_tag "route_id", options_for_select(@trams.collect {|t| [t.route_name, t.id]}, selected: @tram.id) %>
+  <%= submit_tag("Select") %>
+<% end %>
+
+<%= form_with url: url_for(:controller => :trams, :action => :order_select) do %>
+  <label for="trip_id">Select tram order:</label>
+  <%= select_tag "trip_id", options_for_select(@trips.collect {|t| [t.get_trip_order, t.id]}, selected: @trip.id) %>
+  <%= submit_tag("Select") %>
+<% end %>
+
+<%= form_with url: url_for(:controller => :trams, :action => :time_select) do %>
+  <label for="time">Fill in time:</label>
+  <%= time_select :time, "time_select", default: {hour: @time_hod, minute: @time_min} %><br>
+  <%= submit_tag("Search Tram!") %>
+<% end %>
+
+<p>This tram is in _______________</p>
