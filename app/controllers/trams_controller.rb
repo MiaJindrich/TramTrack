@@ -10,7 +10,7 @@ class TramsController < ApplicationController
   def show_order
     @trams = Route.all
     @tram = Route.find(params[:route_id])
-    @trips = Trip.where("route_id = ?", params[:route_id])
+    @trips = Trip.get_todays_trips(params[:route_id])
   end
 
   def order_select
@@ -20,7 +20,7 @@ class TramsController < ApplicationController
   def time
     @trams = Route.all
     @tram = Route.find(params[:route_id])
-    @trips = Trip.where("route_id = ?", params[:route_id])
+    @trips = Trip.get_todays_trips(params[:route_id])
     @trip = Trip.find(params[:trip_id])
   end
 
@@ -32,7 +32,7 @@ class TramsController < ApplicationController
   def location
     @trams = Route.all
     @tram = Route.find(params[:route_id])
-    @trips = Trip.where("route_id = ?", params[:route_id])
+    @trips = Trip.get_todays_trips(params[:route_id])
     @trip = Trip.find(params[:trip_id])
     @time_hod, @time_min = params[:time].split(":")
   end
