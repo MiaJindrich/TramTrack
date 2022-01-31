@@ -17,4 +17,12 @@
   <%= submit_tag("Search Tram!") %>
 <% end %>
 
-<p>This tram is in _______________</p>
+<% if @stop_times.length == 1 %>
+  <%= "This tram is in " + @stop_times.first.stop.stop_name %>
+<% else %>
+  <% if @stop_times.first == nil or @stop_times.last == nil%>
+    <%= "This tram is now sleeping." %>
+  <% else %>
+    <%= "This tram in on a way from " + @stop_times.first.stop.stop_name + " to " + @stop_times.last.stop.stop_name %>
+  <% end %>
+<% end %>
