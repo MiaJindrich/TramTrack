@@ -35,6 +35,7 @@ class TramsController < ApplicationController
     @trips = Trip.get_todays_trips(params[:route_id])
     @trip = Trip.find(params[:trip_id])
     @time_hod, @time_min = params[:time].split(":")
+    @stop_times = StopTime.filter_stop_time(params[:time], params[:trip_id])
   end
 
   def parse_time_parameter(time)
